@@ -8,6 +8,8 @@ from selenium.webdriver.chrome.options import Options
 from PIL import Image
 import os
 
+# import ddddocr
+
 sys.path.insert(
     0,
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -153,14 +155,16 @@ class Online(object):
     def verifyCode(self):
         time.sleep(3)
         byt = self.driver.find_element("xpath", "//*[@id='myModal']/div/div/div[2]/img").screenshot_as_png
+        # 1.
         headers = {
             'Content-Type': 'application/octet-stream'
         }
-        #
-        res = requests.post("http://app:port/code", data=byt, headers=headers, verify=False)
+        res = requests.post("http://host:port/code", data=byt, headers=headers, verify=False)
         print(res.text)
         res = json.loads(res.text)
         res = res.get("msg")
+        # 2.
+        # res = ocr.classification(byt)
         try:
             self.driver.find_element("xpath", "//*[@id='verifyCode']").send_keys(res)
             time.sleep(0.5)
